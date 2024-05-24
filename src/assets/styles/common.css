@@ -1,0 +1,138 @@
+.button {
+  @apply inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-[66px] p-5 text-base font-medium leading-[120%] transition-colors;
+}
+
+.button-primary {
+  @apply bg-button-background text-button-foreground hover:bg-button-background-hover hover:text-button-background;
+}
+
+.button-outlined {
+  @apply inline-flex bg-transparent text-button-background ring-2 ring-inset ring-button-background hover:bg-button-background hover:text-button-foreground;
+}
+
+.table-wrapper {
+  @apply divide-y-2 divide-grey;
+}
+
+.table-row-wrapper {
+  @apply grid grid-cols-[44%_1fr] divide-x-2 divide-grey;
+}
+
+.table-cell {
+  @apply pb-4 text-[20px] leading-[24px] text-foreground first:pr-4 first:font-normal last:pl-4 last:font-semibold;
+}
+
+.stage-card {
+  @apply relative flex gap-4 bg-cream p-5;
+}
+
+.stage-card__number {
+  @apply flex h-[36px] w-[36px] flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-background text-[20px] font-semibold leading-[24px];
+}
+
+.stage-card__text {
+  @apply text-[20px] font-medium leading-[24px];
+}
+
+.slider {
+  @apply grid select-none grid-flow-col items-center;
+}
+
+.slider-slide {
+  @apply transition-transform;
+}
+
+.slider-slide__inner {
+  @apply flex flex-col items-center;
+}
+
+.slider-slide__image {
+  @apply relative mb-7 aspect-square overflow-hidden rounded-full pb-[100%];
+  box-shadow: 5px 4px 12.7px 0px rgba(0, 0, 0, 0.25);
+}
+
+.slider-slide__image img {
+  @apply absolute left-0 top-0 h-full w-full object-cover;
+}
+
+.slider-slide__description-wrapper {
+  @apply mb-5 space-y-1.5;
+}
+
+.slider-slide__title {
+  @apply text-center text-[24px] font-semibold leading-[28.8px];
+}
+
+.slider-slide__text {
+  @apply text-center text-[20px] leading-[24px];
+}
+
+.slider-slide__button {
+  @apply inline-flex items-center justify-center overflow-hidden rounded-[62px] bg-transparent p-3 text-base font-medium leading-[19.2px] text-blue ring-1 ring-inset ring-blue transition-colors hover:bg-blue hover:text-background;
+}
+
+.slider-button {
+  @apply inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-foreground transition-colors hover:bg-button-background-hover disabled:bg-disabled;
+}
+
+.field-item {
+  @apply relative box-border pr-[calc(12px+6px)] after:absolute after:right-0 after:top-[calc(1em/2-1.5px)] after:h-1.5 after:w-1.5 after:overflow-hidden after:rounded-full after:bg-background;
+}
+
+[data-running-field] {
+  @apply box-content translate-x-[-80%];
+
+  animation: running-field 12s linear infinite;
+}
+
+.fade-in {
+  animation: fade-in 1.2s ease-in-out;
+}
+
+.from-left {
+  animation: from-left 0.6s ease-in-out;
+}
+
+.from-top {
+  animation: from-top 1.2s ease-in-out;
+}
+
+@keyframes running-field {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes from-left {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes from-top {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 255 255 255;
+    --foreground: 49 49 49;
+
+    --button-background: 31 31 31;
+    --button-foreground: 255 255 255;
+
+    --button-background-hover: 251 206 81;
+
+    --logo-text: 59 56 53;
+
+    --header-height: 88px;
+
+    --red: 245 73 50;
+    --blue: 48 87 162;
+    --cream: 233 222 212;
+    --grey: 208 208 208;
+
+    --disabled: 214 214 214;
+  }
+}
+
+body {
+  @apply bg-background font-primary text-base text-foreground;
+}
