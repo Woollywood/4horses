@@ -1,0 +1,57 @@
+[data-running-field] {
+  @apply box-content translate-x-[-80%];
+
+  animation: running-field 12s linear infinite;
+}
+
+.fade-in {
+  animation: fade-in 1.2s ease-in-out;
+}
+
+.from-left {
+  animation: from-left 0.6s ease-in-out;
+}
+
+.from-top {
+  animation: from-top 1.2s ease-in-out;
+}
+
+@keyframes running-field {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes from-left {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes from-top {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}

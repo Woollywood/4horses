@@ -48,14 +48,20 @@
                     васюкинского турнира по шахматам
                   </p>
                   <div class="flex items-center gap-4">
-                    <div class="button button-primary flex-auto text-center">
+                    <a
+                      class="button button-primary flex-auto text-center"
+                      href="#support"
+                    >
                       Поддержать <br />
                       шахматную мысль
-                    </div>
-                    <div class="button button-outlined flex-auto text-center">
+                    </a>
+                    <a
+                      class="button button-outlined flex-auto text-center"
+                      href="#stages"
+                    >
                       Подробнее <br />
                       о турнире
-                    </div>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -69,7 +75,7 @@
             </div>
           </section>
           <section
-            class="mb-20 text-nowrap bg-red text-[22px] leading-[110%] text-background"
+            class="text-nowrap bg-red text-[22px] leading-[110%] text-background"
           >
             <div
               class="flex items-center gap-3 px-3 py-[18px]"
@@ -86,24 +92,32 @@
               </h2>
             </div>
           </section>
-          <section class="pb-[200px]">
+          <section class="pb-[200px] pt-20" id="support">
             <div class="container">
               <div class="mb-16 flex items-center gap-16">
-                <h2 class="font-secondary text-[36px] uppercase leading-[135%]">
+                <h2
+                  class="font-secondary text-[36px] uppercase leading-[135%]"
+                  data-animation="from-left"
+                >
                   Чтобы поддержать <br />
                   Международный васюкинский турнир <br />
                   посетите лекцию на тему:
                   <span class="text-red">«Плодотворная дебютная идея»</span>
                 </h2>
-                <img src="./src/assets/media/visit/01.png" alt="img" />
+                <img
+                  src="./src/assets/media/visit/01.png"
+                  alt="img"
+                  data-animation="from-right"
+                />
               </div>
               <div class="flex items-center gap-11">
                 <img
                   class="max-w-[474px]"
                   src="./src/assets/media/visit/02.png"
                   alt="img"
+                  data-animation="from-left"
                 />
-                <div>
+                <div data-animation="from-right">
                   <h2
                     class="mb-[60px] font-secondary text-[36px] uppercase leading-[135%]"
                   >
@@ -145,15 +159,19 @@
               </div>
             </div>
           </section>
-          <section class="pb-[200px]">
+          <section class="pb-[120px] pt-20" id="stages">
             <div class="container">
               <div class="relative mb-[54px] inline-block max-w-[900px]">
-                <h2 class="inline-block text-[54px] leading-[64.8px]">
+                <h2
+                  class="inline-block text-[54px] leading-[64.8px]"
+                  data-animation="from-left"
+                >
                   Этапы преображения <br />
                   Васюков
                 </h2>
                 <div
                   class="absolute bottom-[6%] left-[46%] text-[20px] leading-[24px] text-blue"
+                  data-animation="from-right"
                 >
                   Будущие источники
                   <br />
@@ -219,7 +237,12 @@
           <section class="pb-[140px]">
             <div class="container">
               <div class="mb-[60px] flex items-center justify-between gap-6">
-                <h2 class="text-[54px] leading-[64.8px]">Участники турнира</h2>
+                <h2
+                  class="text-[54px] leading-[64.8px]"
+                  data-animation="from-left"
+                >
+                  Участники турнира
+                </h2>
                 <div class="flex items-center gap-[14px]">
                   <button data-slider-prev class="slider-button">
                     <img
