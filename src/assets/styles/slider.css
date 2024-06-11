@@ -1,0 +1,11 @@
+.slider {
+  @apply relative mx-auto block h-full w-full touch-pan-y list-none list-none p-0;
+}
+
+.slider-wrapper {
+  @apply relative box-content flex h-full w-full select-none items-center transition-transform;
+}
+
+.slider-slide {
+  @apply relative flex h-full w-full shrink-0 items-center justify-center transition-transform;
+}

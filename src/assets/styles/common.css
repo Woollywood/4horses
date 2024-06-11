@@ -34,16 +34,8 @@
   @apply text-[20px] font-medium leading-[24px];
 }
 
-.slider {
-  @apply grid select-none grid-flow-col items-center;
-}
-
-.slider-slide {
-  @apply transition-transform;
-}
-
 .slider-slide__inner {
-  @apply flex flex-col items-center;
+  @apply flex w-full flex-col items-center;
 }
 
 .slider-slide__image {
