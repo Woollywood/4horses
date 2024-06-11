@@ -1,5 +1,5 @@
 .slider {
-  @apply relative mx-auto block h-full w-full touch-pan-y list-none list-none p-0;
+  @apply relative mx-auto block h-full w-full touch-pan-y list-none p-0;
 }
 
 .slider-wrapper {

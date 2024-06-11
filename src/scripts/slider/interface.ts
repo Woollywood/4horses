@@ -1,3 +1,9 @@
+export interface SliderBox {
+  sliderWidth: number;
+  totalSpacingWidth: number;
+  totalSlideWidth: number;
+}
+
 export interface SliderBaseOptions {
   slidesPerView: number;
   spaceBetween: number;

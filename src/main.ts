@@ -14,6 +14,14 @@ document.addEventListener("DOMContentLoaded", () => {
   new Slider(sliderElement as HTMLElement, {
     spaceBetween: 20,
     slidesPerView: 3,
+    navigation: {
+      buttonNext: document.querySelector(
+        ".member-navigation[data-navigation-next]",
+      )!,
+      buttonPrev: document.querySelector(
+        ".member-navigation[data-navigation-prev]",
+      )!,
+    },
   });
 
   setupRunningField();
