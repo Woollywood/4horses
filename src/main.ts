@@ -12,8 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const sliderElement = document.querySelector("[data-slider]");
 
   new Slider(sliderElement as HTMLElement, {
-    spaceBetween: 20,
-    slidesPerView: 3,
     navigation: {
       buttonNext: document.querySelector(
         ".member-navigation[data-navigation-next]",
@@ -21,6 +19,20 @@ document.addEventListener("DOMContentLoaded", () => {
       buttonPrev: document.querySelector(
         ".member-navigation[data-navigation-prev]",
       )!,
+    },
+    breakPoints: {
+      320: {
+        spaceBetween: 16,
+        slidesPerView: 1,
+      },
+      568: {
+        spaceBetween: 16,
+        slidesPerView: 2,
+      },
+      1024: {
+        spaceBetween: 20,
+        slidesPerView: 3,
+      },
     },
   });
 

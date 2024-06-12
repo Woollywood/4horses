@@ -5,8 +5,8 @@ export interface SliderBox {
 }
 
 export interface SliderBaseOptions {
-  slidesPerView: number;
-  spaceBetween: number;
+  slidesPerView?: number;
+  spaceBetween?: number;
 }
 
 export interface SliderOptions extends SliderBaseOptions {

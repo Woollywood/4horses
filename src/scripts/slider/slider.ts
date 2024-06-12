@@ -1,10 +1,15 @@
 import { animate, circ } from "../utils";
-import { type SliderOptions, type SliderBox } from "./interface";
+import {
+  type SliderOptions,
+  type SliderBaseOptions,
+  type SliderBox,
+} from "./interface";
 import { Draggable } from "./draggable";
 
 export class Slider {
   private _sliderElementWrapper: HTMLElement | null = null;
   private _slides: HTMLCollection | null = null;
+  private _computedOptions: SliderBaseOptions | null = null;
 
   private _sliderBox: SliderBox | null = null;
   private _slideIndex = 0;
@@ -37,15 +42,27 @@ export class Slider {
     this._slides = this._sliderElementWrapper?.children;
   }
 
+  private _buildComputedProperties() {
+    const { breakPoints } = this._options!;
+
+    const currentBreakpoint = Object.entries(breakPoints!)
+      .slice()
+      .reverse()
+      .find(([key, _]) => window.innerWidth >= Number(key))!;
+
+    const [_, currentValues] = currentBreakpoint;
+    this._computedOptions = currentValues;
+  }
+
   /**
    * Расчет пропорций элементов
    */
   private _calculateBoundingRect() {
-    const { slidesPerView, spaceBetween } = this._options!;
+    const { slidesPerView, spaceBetween } = this._computedOptions!;
 
     const sliderWidth = this._sliderElement?.clientWidth!;
-    const totalSpacingWidth = (slidesPerView - 1) * spaceBetween;
-    const totalSlideWidth = (sliderWidth - totalSpacingWidth) / slidesPerView;
+    const totalSpacingWidth = (slidesPerView! - 1) * spaceBetween!;
+    const totalSlideWidth = (sliderWidth - totalSpacingWidth) / slidesPerView!;
 
     this._sliderBox = {
       sliderWidth,
@@ -58,9 +75,10 @@ export class Slider {
    * Настройки стилей для слайдеров
    */
   private _buildSlides() {
+    this._buildComputedProperties();
     this._calculateBoundingRect();
 
-    const { spaceBetween } = this._options!;
+    const { spaceBetween } = this._computedOptions!;
     const { totalSlideWidth } = this._sliderBox!;
 
     Array.from(this._slides as unknown as HTMLElement[]).forEach(
@@ -135,9 +153,9 @@ export class Slider {
   }
 
   public slideTo(index: number, speed = 300) {
-    const { spaceBetween } = this._options!;
+    const { spaceBetween } = this._computedOptions!;
     const { totalSlideWidth } = this._sliderBox!;
-    this._slideOffset = index * totalSlideWidth + index * spaceBetween;
+    this._slideOffset = index * totalSlideWidth + index * spaceBetween!;
     this._slideToOffsetStyleX(this._slideOffset);
 
     this._slideIndex = index;
