@@ -13,3 +13,13 @@
 .slider-wrapper.dragging {
   @apply cursor-grab;
 }
+
+.slider-pagination-bullet {
+  @apply h-2.5 w-2.5 overflow-hidden rounded-full transition-colors;
+
+  background-color: rgba(217, 217, 217, 1);
+}
+
+.slider-pagination-bullet.active {
+  background-color: rgba(49, 49, 49, 1);
+}

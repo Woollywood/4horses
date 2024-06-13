@@ -20,6 +20,8 @@ export class Slider {
 
   private _isLock = false;
 
+  private _paginationBullets: HTMLElement[] | null = null;
+
   constructor(
     private _sliderElement: HTMLElement,
     private _options?: SliderOptions,
@@ -31,6 +33,7 @@ export class Slider {
 
     this._options?.autoplay ? this._autoplayBuild() : null;
     this._options?.navigation ? this._navigationBuild() : null;
+    this._options?.pagination ? this._paginationBuild() : null;
     // this._buildDraggable();
 
     window.addEventListener("resize", () => this._buildSlides());
@@ -292,11 +295,45 @@ export class Slider {
     });
   }
 
+  /**
+   * Настройка пагинации
+   */
+  private _paginationBuild() {
+    const { pagination } = this._options!;
+    const bullets = Array.from(this._slides! as unknown as HTMLElement[]).map(
+      (_, index) => {
+        const bullet = document.createElement("button");
+        bullet.classList.add("slider-pagination-bullet");
+        bullet.addEventListener("click", () => {
+          const { speed } = this._options!;
+          this.slideTo(index, speed);
+        });
+
+        if (index === this._slideIndex) {
+          bullet.classList.add("active");
+        }
+
+        return bullet;
+      },
+    );
+
+    pagination?.append(...bullets);
+    this._paginationBullets = bullets;
+  }
+
   public slideTo(index: number, speed = 300) {
     const { spaceBetween } = this._computedOptions!;
     const { totalSlideWidth } = this._sliderBox!;
     this._slideOffset = index * totalSlideWidth + index * spaceBetween!;
     this._slideToOffsetStyleX(this._slideOffset, speed);
+
+    this._paginationBullets?.forEach((bullet) =>
+      bullet.classList.remove("active"),
+    );
+
+    this._paginationBullets
+      ?.find((bullet, i) => i === index)
+      ?.classList.add("active");
 
     this._slideIndex = index;
   }
