@@ -18,6 +18,8 @@ export class Slider {
 
   private _draggableEngine: Draggable | null = null;
 
+  private _isLock = false;
+
   constructor(
     private _sliderElement: HTMLElement,
     private _options?: SliderOptions,
@@ -26,6 +28,8 @@ export class Slider {
     this._init();
     this._buildSlidesAttributes();
     this._buildSlides();
+
+    this._options?.autoplay ? this._autoplayBuild() : null;
     this._options?.navigation ? this._navigationBuild() : null;
     // this._buildDraggable();
 
@@ -182,48 +186,108 @@ export class Slider {
 	`;
   }
 
-  /**
-   * Настройка навигации
-   */
-  private _navigationBuild() {
-    const { navigation, loop, speed } = this._options!;
-    const { buttonPrev, buttonNext } = navigation!;
-    const { slidesPerView } = this._computedOptions!;
+  private _nextSlide() {
+    this._isLock = true;
+    this._sliderElementWrapper?.addEventListener(
+      "transitionend",
+      () => (this._isLock = false),
+      {
+        once: true,
+      },
+    );
+
+    const { loop, speed, slidesPerView } = this._options!;
 
     const slideTo = (index: number) => {
       const { speed } = this._options!;
       this.slideTo(index, speed);
     };
 
-    buttonPrev.addEventListener("click", () => {
-      if (this._slideIndex !== 0) {
-        slideTo(this._slideIndex - 1);
-      } else if (loop) {
-        const lastSlide = this._slides![this._slides?.length! - 1];
-        this._sliderElementWrapper?.prepend(lastSlide);
-        this._buildSlides();
-        this.slideTo(1, 0);
-        this._slideIndex = 1;
+    if (this._slideIndex < this._slides?.length! - slidesPerView!) {
+      slideTo(this._slideIndex + 1);
+    } else if (loop) {
+      const firstSlide = this._slides![0];
+      this._sliderElementWrapper?.append(firstSlide);
+      this._buildSlides();
+      this.slideTo(this._slides?.length! - slidesPerView! - 1, 0);
+      this.slideTo(this._slides?.length! - slidesPerView! - 1, 0);
 
-        setTimeout(() => {
-          this.slideTo(0, speed);
-        }, 0);
+      setTimeout(() => {
+        this.slideTo(this._slides?.length! - slidesPerView!, speed);
+      }, 10);
+    }
+  }
+
+  private _prevSlide() {
+    this._isLock = true;
+    this._sliderElementWrapper?.addEventListener(
+      "transitionend",
+      () => (this._isLock = false),
+      {
+        once: true,
+      },
+    );
+
+    const { loop, speed } = this._options!;
+
+    const slideTo = (index: number) => {
+      const { speed } = this._options!;
+      this.slideTo(index, speed);
+    };
+
+    if (this._slideIndex !== 0) {
+      slideTo(this._slideIndex - 1);
+    } else if (loop) {
+      const lastSlide = this._slides![this._slides?.length! - 1];
+      this._sliderElementWrapper?.prepend(lastSlide);
+      this._buildSlides();
+      this.slideTo(1, 0);
+      this._slideIndex = 1;
+
+      setTimeout(() => {
+        this.slideTo(0, speed);
+      }, 0);
+    }
+  }
+
+  /**
+   * Настройка автоматического пролистывания
+   */
+  private _autoplayBuild() {
+    const { autoplay } = this._options!;
+    const { delay } = autoplay!;
+
+    setInterval(() => {
+      this._isLock = true;
+      this._nextSlide();
+      this._sliderElementWrapper?.addEventListener(
+        "transitionend",
+        () => {
+          this._isLock = false;
+        },
+        {
+          once: true,
+        },
+      );
+    }, delay);
+  }
+
+  /**
+   * Настройка навигации
+   */
+  private _navigationBuild() {
+    const { navigation } = this._options!;
+    const { buttonPrev, buttonNext } = navigation!;
+
+    buttonPrev.addEventListener("click", () => {
+      if (!this._isLock) {
+        this._prevSlide();
       }
     });
 
     buttonNext.addEventListener("click", () => {
-      if (this._slideIndex < this._slides?.length! - slidesPerView!) {
-        slideTo(this._slideIndex + 1);
-      } else if (loop) {
-        const firstSlide = this._slides![0];
-        this._sliderElementWrapper?.append(firstSlide);
-        this._buildSlides();
-        this.slideTo(this._slides?.length! - slidesPerView! - 1, 0);
-        this.slideTo(this._slides?.length! - slidesPerView! - 1, 0);
-
-        setTimeout(() => {
-          this.slideTo(this._slides?.length! - slidesPerView!, speed);
-        }, 10);
+      if (!this._isLock) {
+        this._nextSlide();
       }
     });
   }
@@ -233,8 +297,6 @@ export class Slider {
     const { totalSlideWidth } = this._sliderBox!;
     this._slideOffset = index * totalSlideWidth + index * spaceBetween!;
     this._slideToOffsetStyleX(this._slideOffset, speed);
-
-    console.log(this._slideOffset);
 
     this._slideIndex = index;
   }
