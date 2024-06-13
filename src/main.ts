@@ -12,9 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   new Slider(sliderElement as HTMLElement, {
     loop: true,
-    autoplay: {
-      delay: 1000,
-    },
+    // autoplay: {
+    //   delay: 1000,
+    // },
     speed: 300,
     navigation: {
       buttonNext: document.querySelector(
@@ -40,5 +40,5 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   });
 
-  observerInit();
+  //   observerInit();
 });

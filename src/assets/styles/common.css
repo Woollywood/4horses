@@ -1,5 +1,5 @@
 .button {
-  @apply inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-[66px] p-5 text-base font-medium leading-[120%] transition-colors;
+  @apply inline-flex h-[72px] cursor-pointer items-center justify-center overflow-hidden rounded-[66px] p-2 text-base font-medium leading-[120%] transition-colors;
 }
 
 .button-primary {
@@ -15,7 +15,7 @@
 }
 
 .table-row-wrapper {
-  @apply grid grid-cols-[44%_1fr] divide-x-2 divide-grey;
+  @apply grid grid-cols-[44%_1fr] divide-x-2 divide-grey pt-4 first:pt-0;
 }
 
 .table-cell {
@@ -35,7 +35,7 @@
 }
 
 .slider-slide__inner {
-  @apply flex w-full flex-col items-center;
+  @apply flex w-full flex-col items-center px-9;
 }
 
 .slider-slide__image {
