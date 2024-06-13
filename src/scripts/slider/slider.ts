@@ -16,6 +16,7 @@ export class Slider {
 
   private _sliderBox: SliderBox | null = null;
   private _slideIndex = 0;
+  private _realIndex = 0;
   private _slideOffset = 0;
 
   private _draggableEngine: Draggable | null = null;
@@ -192,6 +193,15 @@ export class Slider {
   }
 
   private _nextSlide() {
+    const { loop, speed, slidesPerView } = this._options!;
+
+    if (
+      !loop &&
+      this._slideIndex > this._slides?.length! - slidesPerView! - 1
+    ) {
+      return;
+    }
+
     this._isLock = true;
     this._sliderElementWrapper?.addEventListener(
       "transitionend",
@@ -201,12 +211,16 @@ export class Slider {
       },
     );
 
-    const { loop, speed, slidesPerView } = this._options!;
-
     const slideTo = (index: number) => {
       const { speed } = this._options!;
       this.slideTo(index, speed);
     };
+
+    if (this._realIndex === this._slides?.length! - 1) {
+      this._realIndex = 0;
+    } else {
+      this._realIndex = this._realIndex + 1;
+    }
 
     if (this._slideIndex < this._slides?.length! - slidesPerView!) {
       slideTo(this._slideIndex + 1);
@@ -214,8 +228,7 @@ export class Slider {
       const firstSlide = this._slides![0];
       this._sliderElementWrapper?.append(firstSlide);
       this._buildSlides();
-      this.slideTo(this._slides?.length! - slidesPerView! - 1, 0);
-      this.slideTo(this._slides?.length! - slidesPerView! - 1, 0);
+      this.__slideToIdle(this._slides?.length! - slidesPerView! - 1, 0);
 
       setTimeout(() => {
         this.slideTo(this._slides?.length! - slidesPerView!, speed);
@@ -224,6 +237,12 @@ export class Slider {
   }
 
   private _prevSlide() {
+    const { loop, speed } = this._options!;
+
+    if (!loop && this._slideIndex === 0) {
+      return;
+    }
+
     this._isLock = true;
     this._sliderElementWrapper?.addEventListener(
       "transitionend",
@@ -233,12 +252,16 @@ export class Slider {
       },
     );
 
-    const { loop, speed } = this._options!;
-
     const slideTo = (index: number) => {
       const { speed } = this._options!;
       this.slideTo(index, speed);
     };
+
+    if (this._realIndex === 0) {
+      this._realIndex = this._slides?.length! - 1;
+    } else {
+      this._realIndex = this._realIndex - 1;
+    }
 
     if (this._slideIndex !== 0) {
       slideTo(this._slideIndex - 1);
@@ -246,7 +269,7 @@ export class Slider {
       const lastSlide = this._slides![this._slides?.length! - 1];
       this._sliderElementWrapper?.prepend(lastSlide);
       this._buildSlides();
-      this.slideTo(1, 0);
+      this.__slideToIdle(1, 0);
       this._slideIndex = 1;
 
       setTimeout(() => {
@@ -282,17 +305,17 @@ export class Slider {
    */
   private _navigationBuild() {
     const { navigation } = this._options!;
-    const { buttonPrev, buttonNext } = navigation!;
-
-    buttonPrev.addEventListener("click", () => {
-      if (!this._isLock) {
-        this._prevSlide();
-      }
-    });
+    const { buttonNext, buttonPrev } = navigation!;
 
     buttonNext.addEventListener("click", () => {
       if (!this._isLock) {
         this._nextSlide();
+      }
+    });
+
+    buttonPrev.addEventListener("click", () => {
+      if (!this._isLock) {
+        this._prevSlide();
       }
     });
   }
@@ -317,12 +340,23 @@ export class Slider {
         ).map((_, index) => {
           const bullet = document.createElement("button");
           bullet.classList.add("slider-pagination-bullet");
+          bullet.dataset.bulletIndex = `${index}`;
           bullet.addEventListener("click", () => {
-            const { speed } = this._options!;
-            this.slideTo(index, speed);
+            const { slidesPerView } = this._computedOptions!;
+
+            if (index > this._slides?.length! - slidesPerView!) {
+              this._slideIndex = this._realIndex =
+                this._slides?.length! - slidesPerView!;
+              this.__slideToIdle(this._slideIndex);
+            } else {
+              this._slideIndex = this._realIndex = index;
+              this.__slideToIdle(index);
+            }
+
+            this._paginationUpdate();
           });
 
-          if (index === this._slideIndex) {
+          if (index === this._realIndex) {
             bullet.classList.add("active");
           }
 
@@ -375,29 +409,41 @@ export class Slider {
     }
   }
 
-  public slideTo(index: number, speed = 300) {
-    const { spaceBetween } = this._computedOptions!;
-    const { totalSlideWidth } = this._sliderBox!;
-    this._slideOffset = index * totalSlideWidth + index * spaceBetween!;
-    this._slideToOffsetStyleX(this._slideOffset, speed);
-
-    console.log(this._pagination?.type);
-
+  private _paginationUpdate() {
     if (this._pagination?.type === "normal") {
       this._pagination.bullets?.forEach((bullet) =>
         bullet.classList.remove("active"),
       );
 
       this._pagination.bullets
-        ?.find((bullet, i) => i === index)
+        ?.find((bullet, i) => i === this._realIndex)
         ?.classList.add("active");
     } else {
-      console.log("fraction");
-
       const fractionCurrentElement =
         this._pagination?.fraction?.currentElement!;
-      fractionCurrentElement.innerHTML = `${index + 1}`;
+      fractionCurrentElement.innerHTML = `${this._realIndex + 1}`;
     }
+  }
+
+  /**
+   *
+   * Холостая прокрутка
+   *
+   * @param index индекс слайда
+   */
+  private __slideToIdle(index: number, speed = this._options?.speed!) {
+    const { spaceBetween } = this._computedOptions!;
+    const { totalSlideWidth } = this._sliderBox!;
+    this._slideOffset = index * totalSlideWidth + index * spaceBetween!;
+    this._slideToOffsetStyleX(this._slideOffset, speed);
+  }
+
+  public slideTo(index: number, speed = 300) {
+    const { spaceBetween } = this._computedOptions!;
+    const { totalSlideWidth } = this._sliderBox!;
+    this._slideOffset = index * totalSlideWidth + index * spaceBetween!;
+    this._slideToOffsetStyleX(this._slideOffset, speed);
+    this._paginationUpdate();
 
     this._slideIndex = index;
   }
