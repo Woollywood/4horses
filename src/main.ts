@@ -4,7 +4,6 @@ import "./assets/styles/animation.css";
 
 import "./assets/styles/slider.css";
 
-import { setupRunningField } from "./scripts/animation";
 import { observerInit } from "./scripts/scroll";
 import { Slider } from "./scripts/slider";
 
@@ -41,6 +40,5 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   });
 
-  setupRunningField();
   observerInit();
 });

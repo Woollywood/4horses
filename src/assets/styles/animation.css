@@ -1,7 +1,9 @@
-[data-running-field] {
-  @apply box-content translate-x-[-80%];
+.animation-slide {
+  animation: slide 12s linear infinite;
+}
 
-  animation: running-field 12s linear infinite;
+.animation-slide-next {
+  animation: slide-next 12s linear infinite;
 }
 
 .fade-in {
@@ -16,13 +18,22 @@
   animation: from-top 1.2s ease-in-out;
 }
 
-@keyframes running-field {
+@keyframes slide {
   from {
     transform: translateX(0);
   }
 
   to {
     transform: translateX(-100%);
+  }
+}
+
+@keyframes slide-next {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
   }
 }
 
