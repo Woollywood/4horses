@@ -1,3 +1,4 @@
+import { initialOptions } from "./utils";
 import { animate, circ } from "../utils";
 import {
   type SliderOptions,
@@ -21,12 +22,32 @@ export class Slider {
     private _sliderElement: HTMLElement,
     private _options?: SliderOptions,
   ) {
+    this._optionsConcat();
     this._init();
     this._buildSlides();
-    this._navigationBuild();
+    this._options?.navigation ? this._navigationBuild() : null;
     // this._buildDraggable();
 
     window.addEventListener("resize", () => this._buildSlides());
+  }
+
+  /**
+   * Заполнение _options дефолтными значениями
+   */
+  private _optionsConcat() {
+    const defaultOptions = initialOptions();
+
+    if (!this._options) {
+      this._options = defaultOptions;
+    } else {
+      Object.entries(defaultOptions).forEach(([key, value]) => {
+        // @ts-ignore
+        if (!this._options[key]) {
+          // @ts-ignore
+          this._options[key] = value;
+        }
+      });
+    }
   }
 
   /**
@@ -43,15 +64,24 @@ export class Slider {
   }
 
   private _buildComputedProperties() {
-    const { breakPoints } = this._options!;
+    const { breakpoints } = this._options!;
 
-    const currentBreakpoint = Object.entries(breakPoints!)
-      .slice()
-      .reverse()
-      .find(([key, _]) => window.innerWidth >= Number(key))!;
+    if (breakpoints) {
+      const currentBreakpoint = Object.entries(breakpoints!)
+        .slice()
+        .reverse()
+        .find(([key, _]) => window.innerWidth >= Number(key))!;
 
-    const [_, currentValues] = currentBreakpoint;
-    this._computedOptions = currentValues;
+      const [_, currentValues] = currentBreakpoint;
+      this._computedOptions = currentValues;
+    } else {
+      const { spaceBetween, slidesPerView } = this._options!;
+
+      this._computedOptions = {
+        spaceBetween,
+        slidesPerView,
+      };
+    }
   }
 
   /**
@@ -142,14 +172,23 @@ export class Slider {
   private _navigationBuild() {
     const { navigation } = this._options!;
     const { buttonPrev, buttonNext } = navigation!;
+    const { slidesPerView } = this._computedOptions!;
 
-    buttonPrev.addEventListener("click", (e) =>
-      this.slideTo(this._slideIndex - 1),
-    );
+    buttonPrev.addEventListener("click", () => {
+      if (this._slideIndex === 0) {
+        this._slideIndex = this._slides?.length! - slidesPerView! + 1;
+      }
 
-    buttonNext.addEventListener("click", (e) =>
-      this.slideTo(this._slideIndex + 1),
-    );
+      this.slideTo(this._slideIndex - 1);
+    });
+
+    buttonNext.addEventListener("click", () => {
+      if (this._slideIndex >= this._slides?.length! - slidesPerView!) {
+        this._slideIndex = -1;
+      }
+
+      this.slideTo(this._slideIndex + 1);
+    });
   }
 
   public slideTo(index: number, speed = 300) {

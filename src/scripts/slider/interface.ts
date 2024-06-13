@@ -10,12 +10,13 @@ export interface SliderBaseOptions {
 }
 
 export interface SliderOptions extends SliderBaseOptions {
+  loop?: boolean;
   navigation?: {
     buttonPrev: HTMLElement;
     buttonNext: HTMLElement;
   };
   pagination?: HTMLElement;
-  breakPoints?: {
+  breakpoints?: {
     [key: number]: Partial<SliderBaseOptions>;
   };
 }
