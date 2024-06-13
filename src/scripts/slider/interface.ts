@@ -11,6 +11,7 @@ export interface SliderBaseOptions {
 
 export interface SliderOptions extends SliderBaseOptions {
   loop?: boolean;
+  speed?: number;
   navigation?: {
     buttonPrev: HTMLElement;
     buttonNext: HTMLElement;

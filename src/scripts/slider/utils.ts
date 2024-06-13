@@ -5,5 +5,6 @@ export function initialOptions(): SliderOptions {
     loop: false,
     spaceBetween: 20,
     slidesPerView: 3,
+    speed: 600,
   };
 }

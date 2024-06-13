@@ -24,6 +24,7 @@ export class Slider {
   ) {
     this._optionsConcat();
     this._init();
+    this._buildSlidesAttributes();
     this._buildSlides();
     this._options?.navigation ? this._navigationBuild() : null;
     // this._buildDraggable();
@@ -63,6 +64,9 @@ export class Slider {
     this._slides = this._sliderElementWrapper?.children;
   }
 
+  /**
+   * Расчет вычисленных значений от ширины экрана и брейкпоинтов
+   */
   private _buildComputedProperties() {
     const { breakpoints } = this._options!;
 
@@ -102,7 +106,16 @@ export class Slider {
   }
 
   /**
-   * Настройки стилей для слайдеров
+   * Настройка атрибутов для слайдов
+   */
+  private _buildSlidesAttributes() {
+    Array.from(this._slides as unknown as HTMLElement[]).forEach(
+      (slide, index) => (slide.dataset.slideIndex = String(index)),
+    );
+  }
+
+  /**
+   * Настройки стилей для слайдов
    */
   private _buildSlides() {
     this._buildComputedProperties();
@@ -111,9 +124,12 @@ export class Slider {
     const { spaceBetween } = this._computedOptions!;
     const { totalSlideWidth } = this._sliderBox!;
 
-    Array.from(this._slides as unknown as HTMLElement[]).forEach(
-      (slide) => (slide.style.width = `${totalSlideWidth}px`),
-    );
+    this._slides = this._sliderElementWrapper?.children!;
+
+    Array.from(this._slides as unknown as HTMLElement[]).forEach((slide) => {
+      slide.style.width = `${totalSlideWidth}px`;
+      slide.style.margin = "0";
+    });
 
     Array.from(this._slides as unknown as HTMLElement[])
       .slice(0, -1)
@@ -142,7 +158,7 @@ export class Slider {
     this._draggableEngine.subscribe((_, offset) => {
       dragOffset = this._slideOffset + Math.floor(offset);
 
-      this._slideToOffsetStyleX(-dragOffset);
+      //   this._slideToOffsetStyleX(-dragOffset);
     });
 
     if (Math.abs(dragOffset) >= sufficientOffset) {
@@ -157,7 +173,7 @@ export class Slider {
    *
    * @param offsetX
    */
-  private _slideToOffsetStyleX(offsetX: number, speed = 300) {
+  private _slideToOffsetStyleX(offsetX: number, speed: number) {
     // @ts-ignore
     this._sliderElementWrapper.style.cssText = `
 		transition-duration: ${speed}ms;
@@ -170,24 +186,45 @@ export class Slider {
    * Настройка навигации
    */
   private _navigationBuild() {
-    const { navigation } = this._options!;
+    const { navigation, loop, speed } = this._options!;
     const { buttonPrev, buttonNext } = navigation!;
     const { slidesPerView } = this._computedOptions!;
 
-    buttonPrev.addEventListener("click", () => {
-      if (this._slideIndex === 0) {
-        this._slideIndex = this._slides?.length! - slidesPerView! + 1;
-      }
+    const slideTo = (index: number) => {
+      const { speed } = this._options!;
+      this.slideTo(index, speed);
+    };
 
-      this.slideTo(this._slideIndex - 1);
+    buttonPrev.addEventListener("click", () => {
+      if (this._slideIndex !== 0) {
+        slideTo(this._slideIndex - 1);
+      } else if (loop) {
+        const lastSlide = this._slides![this._slides?.length! - 1];
+        this._sliderElementWrapper?.prepend(lastSlide);
+        this._buildSlides();
+        this.slideTo(1, 0);
+        this._slideIndex = 1;
+
+        setTimeout(() => {
+          this.slideTo(0, speed);
+        }, 0);
+      }
     });
 
     buttonNext.addEventListener("click", () => {
-      if (this._slideIndex >= this._slides?.length! - slidesPerView!) {
-        this._slideIndex = -1;
-      }
+      if (this._slideIndex < this._slides?.length! - slidesPerView!) {
+        slideTo(this._slideIndex + 1);
+      } else if (loop) {
+        const firstSlide = this._slides![0];
+        this._sliderElementWrapper?.append(firstSlide);
+        this._buildSlides();
+        this.slideTo(this._slides?.length! - slidesPerView! - 1, 0);
+        this.slideTo(this._slides?.length! - slidesPerView! - 1, 0);
 
-      this.slideTo(this._slideIndex + 1);
+        setTimeout(() => {
+          this.slideTo(this._slides?.length! - slidesPerView!, speed);
+        }, 10);
+      }
     });
   }
 
@@ -195,7 +232,9 @@ export class Slider {
     const { spaceBetween } = this._computedOptions!;
     const { totalSlideWidth } = this._sliderBox!;
     this._slideOffset = index * totalSlideWidth + index * spaceBetween!;
-    this._slideToOffsetStyleX(this._slideOffset);
+    this._slideToOffsetStyleX(this._slideOffset, speed);
+
+    console.log(this._slideOffset);
 
     this._slideIndex = index;
   }

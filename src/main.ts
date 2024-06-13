@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   new Slider(sliderElement as HTMLElement, {
     loop: true,
+    speed: 300,
     navigation: {
       buttonNext: document.querySelector(
         ".member-navigation[data-navigation-next]",
