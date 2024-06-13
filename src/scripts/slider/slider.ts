@@ -1,9 +1,11 @@
 import { initialOptions } from "./utils";
 import { animate, circ } from "../utils";
-import {
-  type SliderOptions,
-  type SliderBaseOptions,
-  type SliderBox,
+import type {
+  SliderOptions,
+  SliderBaseOptions,
+  SliderBox,
+  Pagination,
+  PaginationType,
 } from "./interface";
 import { Draggable } from "./draggable";
 
@@ -20,7 +22,7 @@ export class Slider {
 
   private _isLock = false;
 
-  private _paginationBullets: HTMLElement[] | null = null;
+  private _pagination: Pagination | null = null;
 
   constructor(
     private _sliderElement: HTMLElement,
@@ -300,25 +302,77 @@ export class Slider {
    */
   private _paginationBuild() {
     const { pagination } = this._options!;
-    const bullets = Array.from(this._slides! as unknown as HTMLElement[]).map(
-      (_, index) => {
-        const bullet = document.createElement("button");
-        bullet.classList.add("slider-pagination-bullet");
-        bullet.addEventListener("click", () => {
-          const { speed } = this._options!;
-          this.slideTo(index, speed);
+    let type: PaginationType | null = null;
+
+    if (pagination instanceof HTMLElement) {
+      type = "normal";
+    } else {
+      pagination?.type === "normal" ? (type = "normal") : (type = "fraction");
+    }
+
+    switch (type) {
+      case "normal": {
+        const bullets = Array.from(
+          this._slides! as unknown as HTMLElement[],
+        ).map((_, index) => {
+          const bullet = document.createElement("button");
+          bullet.classList.add("slider-pagination-bullet");
+          bullet.addEventListener("click", () => {
+            const { speed } = this._options!;
+            this.slideTo(index, speed);
+          });
+
+          if (index === this._slideIndex) {
+            bullet.classList.add("active");
+          }
+
+          return bullet;
         });
 
-        if (index === this._slideIndex) {
-          bullet.classList.add("active");
-        }
+        this._pagination = {
+          el: pagination instanceof HTMLElement ? pagination : pagination?.el!,
+          type: "normal",
+          bullets,
+        };
 
-        return bullet;
-      },
-    );
+        this._pagination.el.append(...bullets);
+        break;
+      }
+      case "fraction": {
+        const [wrapper, currentElement, maxElement] = [
+          document.createElement("div"),
+          document.createElement("span"),
+          document.createElement("span"),
+        ];
 
-    pagination?.append(...bullets);
-    this._paginationBullets = bullets;
+        wrapper.classList.add("slider-pagination-fraction");
+        currentElement.classList.add(
+          "slider-pagination-fraction-element",
+          "current",
+        );
+
+        currentElement.innerHTML = `${this._slideIndex + 1}`;
+        maxElement.innerHTML = `${this._slides?.length}`;
+        wrapper.append(currentElement, maxElement);
+
+        this._pagination = {
+          el: pagination instanceof HTMLElement ? pagination : pagination?.el!,
+          type: "fraction",
+          fraction: {
+            currentElement,
+            maxElement,
+            wrapper,
+          },
+        };
+
+        const sep = document.createElement("span");
+        sep.innerHTML = "/";
+        currentElement.after(sep);
+        this._pagination.el.append(wrapper);
+
+        break;
+      }
+    }
   }
 
   public slideTo(index: number, speed = 300) {
@@ -327,13 +381,23 @@ export class Slider {
     this._slideOffset = index * totalSlideWidth + index * spaceBetween!;
     this._slideToOffsetStyleX(this._slideOffset, speed);
 
-    this._paginationBullets?.forEach((bullet) =>
-      bullet.classList.remove("active"),
-    );
+    console.log(this._pagination?.type);
 
-    this._paginationBullets
-      ?.find((bullet, i) => i === index)
-      ?.classList.add("active");
+    if (this._pagination?.type === "normal") {
+      this._pagination.bullets?.forEach((bullet) =>
+        bullet.classList.remove("active"),
+      );
+
+      this._pagination.bullets
+        ?.find((bullet, i) => i === index)
+        ?.classList.add("active");
+    } else {
+      console.log("fraction");
+
+      const fractionCurrentElement =
+        this._pagination?.fraction?.currentElement!;
+      fractionCurrentElement.innerHTML = `${index + 1}`;
+    }
 
     this._slideIndex = index;
   }

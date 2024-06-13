@@ -1,3 +1,23 @@
+export interface PaginationBullets {
+  bullets: HTMLElement[];
+}
+
+export interface PaginationFractions {
+  fraction: {
+    wrapper: HTMLElement;
+    currentElement: HTMLElement;
+    maxElement: HTMLElement;
+  };
+}
+
+export type PaginationType = "normal" | "fraction";
+
+export type Pagination = {
+  el: HTMLElement;
+  type: PaginationType;
+} & Partial<PaginationBullets> &
+  Partial<PaginationFractions>;
+
 export interface SliderBox {
   sliderWidth: number;
   totalSpacingWidth: number;
@@ -19,7 +39,12 @@ export interface SliderOptions extends SliderBaseOptions {
     buttonPrev: HTMLElement;
     buttonNext: HTMLElement;
   };
-  pagination?: HTMLElement;
+  pagination?:
+    | HTMLElement
+    | {
+        el: HTMLElement;
+        type: PaginationType;
+      };
   breakpoints?: {
     [key: number]: Partial<SliderBaseOptions>;
   };

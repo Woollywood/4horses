@@ -24,6 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
         ".member-navigation[data-navigation-prev]",
       )!,
     },
+    pagination: {
+      el: document.querySelector("[data-slider-pagination]")! as HTMLElement,
+      type: "fraction",
+    },
     breakpoints: {
       320: {
         spaceBetween: 16,
