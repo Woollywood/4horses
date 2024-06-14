@@ -7,7 +7,6 @@ import type {
   Pagination,
   PaginationType,
 } from "./interface";
-import { Draggable } from "./draggable";
 
 export class Slider {
   private _sliderElementWrapper: HTMLElement | null = null;
@@ -18,8 +17,6 @@ export class Slider {
   private _slideIndex = 0;
   private _realIndex = 0;
   private _slideOffset = 0;
-
-  private _draggableEngine: Draggable | null = null;
 
   private _isLock = false;
 
@@ -37,7 +34,6 @@ export class Slider {
     this._options?.autoplay ? this._autoplayBuild() : null;
     this._options?.navigation ? this._navigationBuild() : null;
     this._options?.pagination ? this._paginationBuild() : null;
-    // this._buildDraggable();
 
     window.addEventListener("resize", () => this._buildSlides());
   }
@@ -146,36 +142,6 @@ export class Slider {
       .forEach((slide) => {
         slide.style.marginRight = `${spaceBetween}px`;
       });
-  }
-
-  /**
-   * Настройка draggable
-   */
-  private _buildDraggable() {
-    this._draggableEngine = new Draggable(this._sliderElementWrapper!);
-
-    let dragOffset = 0;
-    const sufficientOffset = this._sliderBox?.totalSlideWidth! / (3 / 2);
-
-    function nextSlide() {
-      console.log("more");
-    }
-
-    function prevSlide() {
-      console.log("prev");
-    }
-
-    this._draggableEngine.subscribe((_, offset) => {
-      dragOffset = this._slideOffset + Math.floor(offset);
-
-      //   this._slideToOffsetStyleX(-dragOffset);
-    });
-
-    if (Math.abs(dragOffset) >= sufficientOffset) {
-      this._draggableEngine?.subscribeEnd(nextSlide);
-    } else {
-      this._draggableEngine?.subscribeEnd(prevSlide);
-    }
   }
 
   /**
