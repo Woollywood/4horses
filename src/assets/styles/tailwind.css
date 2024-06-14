@@ -23,6 +23,12 @@
 
     --disabled: 214 214 214;
   }
+
+  @media (max-width: 768px) {
+    :root {
+      --header-height: 68px;
+    }
+  }
 }
 
 html {

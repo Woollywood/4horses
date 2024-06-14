@@ -1,10 +1,10 @@
-/* .animation-slide {
+.animation-slide {
   animation: slide 12s linear infinite;
 }
 
 .animation-slide-next {
   animation: slide-next 12s linear infinite;
-} */
+}
 
 .fade-in {
   animation: fade-in 1.2s ease-in-out;

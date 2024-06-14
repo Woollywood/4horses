@@ -1,5 +1,5 @@
 .button {
-  @apply inline-flex h-[72px] cursor-pointer items-center justify-center overflow-hidden rounded-[66px] p-2 text-base font-medium leading-[120%] transition-colors;
+  @apply inline-flex h-12 cursor-pointer items-center justify-center overflow-hidden rounded-[66px] p-2 text-base font-medium leading-[120%] transition-colors sm:h-[72px];
 }
 
 .button-primary {
@@ -7,23 +7,39 @@
 }
 
 .button-outlined {
-  @apply inline-flex bg-transparent text-button-background ring-2 ring-inset ring-button-background hover:bg-button-background hover:text-button-foreground;
+  @apply inline-flex bg-white text-button-background ring-inset ring-button-background hover:bg-button-background hover:text-button-foreground xl:bg-transparent xl:ring-2;
+}
+
+.title-secondary {
+  @apply font-secondary text-4xl uppercase leading-[110%] sm:text-5xl md:text-[54px] md:leading-[64.8px];
+}
+
+.second-title {
+  @apply text-left font-secondary text-[28px] uppercase leading-[135%] sm:text-[32px] md:text-center lg:text-left xl:text-[36px];
 }
 
 .table-wrapper {
-  @apply divide-y-2 divide-grey;
+  @apply w-full divide-y-2 divide-grey md:w-auto;
 }
 
 .table-row-wrapper {
-  @apply grid grid-cols-[45%_1fr] divide-x-2 divide-grey first:pt-0;
+  @apply flex flex-col pt-4 first:pt-0 md:grid md:grid-cols-[45%_1fr] md:divide-x-2 md:divide-grey md:pt-0;
 }
 
 .table-cell {
-  @apply p-4 text-[20px] leading-[24px] text-foreground first:pr-4 first:font-normal last:pl-4 last:font-semibold;
+  @apply text-[20px] leading-[24px] text-foreground first:mb-3 first:font-normal last:mb-4 last:font-semibold md:p-4 md:first:mb-0 md:first:pr-4 md:last:mb-0 md:last:pl-4;
 }
 
 .stage-card {
-  @apply relative flex gap-4 bg-cream p-5;
+  @apply relative flex gap-4 bg-cream p-4 last:pt-24 lg:p-5 last:lg:pt-5;
+}
+
+.stage-card--mobile {
+  @apply flex-col !pt-[62px] pb-[34px] pl-5 pr-6;
+}
+
+.stage-card--mobile div {
+  @apply flex gap-4;
 }
 
 .stage-card__number {
@@ -31,15 +47,19 @@
 }
 
 .stage-card__text {
-  @apply text-[20px] font-medium leading-[24px];
+  @apply text-[18px] font-medium leading-[24px] md:text-[20px];
 }
 
 .slider-slide__inner {
-  @apply flex w-full flex-col items-center px-9;
+  @apply flex w-full flex-col items-center;
+}
+
+.slider-slide__image-wrapper {
+  @apply mb-7 w-full px-[46px] md:px-4 lg:px-6 xl:px-9;
 }
 
 .slider-slide__image {
-  @apply relative mb-7 aspect-square overflow-hidden rounded-full pb-[100%];
+  @apply relative aspect-square h-full w-full overflow-hidden rounded-full pb-[100%];
   box-shadow: 5px 4px 12.7px 0px rgba(0, 0, 0, 0.25);
 }
 
@@ -60,7 +80,7 @@
 }
 
 .slider-slide__button {
-  @apply inline-flex items-center justify-center overflow-hidden rounded-[62px] bg-transparent p-3 text-base font-medium leading-[19.2px] text-blue ring-1 ring-inset ring-blue transition-colors hover:bg-blue hover:text-background;
+  @apply inline-flex items-center justify-center overflow-hidden rounded-[62px] bg-transparent p-3 text-base font-medium leading-[62%] text-blue ring-1 ring-inset ring-blue transition-colors hover:bg-blue hover:text-background sm:leading-[19.2px];
 }
 
 .slider-button {
@@ -68,5 +88,17 @@
 }
 
 .field-item {
-  @apply relative box-border pr-[calc(12px+6px)] after:absolute after:right-0 after:top-[calc(1em/2-1.5px)] after:h-1.5 after:w-1.5 after:overflow-hidden after:rounded-full after:bg-background;
+  @apply relative box-border pr-[calc(12px+6px)] text-base after:absolute after:right-0 after:top-[calc(1em/2-1.5px)] after:h-1.5 after:w-1.5 after:overflow-hidden after:rounded-full after:bg-background sm:text-[18px] md:text-[22px];
+}
+
+.animation-slide-wrapper {
+  @apply h-[38px] md:h-[60px];
+}
+
+.animation-slide {
+  @apply absolute left-0 top-0 flex h-full items-center gap-3 whitespace-nowrap text-nowrap px-3 py-2 text-[22px] leading-[110%] text-background md:py-4;
+}
+
+.animation-slide-next {
+  @apply absolute left-0 top-0 flex h-full items-center gap-3 whitespace-nowrap text-nowrap px-3 py-2 text-[22px] leading-[110%] text-background md:py-4;
 }
