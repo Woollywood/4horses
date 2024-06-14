@@ -3,11 +3,11 @@
 }
 
 .slider-wrapper {
-  @apply relative box-content flex h-full w-full select-none items-center transition-transform;
+  @apply relative box-content flex h-full w-full select-none items-stretch transition-transform;
 }
 
 .slider-slide {
-  @apply relative flex h-full w-full shrink-0 items-center justify-center transition-transform;
+  @apply relative flex w-full shrink-0 items-center justify-center transition-transform;
 }
 
 .slider-wrapper.dragging {

@@ -23,11 +23,11 @@
 }
 
 .table-row-wrapper {
-  @apply flex flex-col pt-4 first:pt-0 md:grid md:grid-cols-[45%_1fr] md:divide-x-2 md:divide-grey md:pt-0;
+  @apply flex flex-wrap gap-3 pt-4 first:pt-0 md:grid md:grid-cols-[45%_1fr] md:gap-0 md:divide-x-2 md:divide-grey md:pt-0;
 }
 
 .table-cell {
-  @apply text-[20px] leading-[24px] text-foreground first:mb-3 first:font-normal last:mb-4 last:font-semibold md:p-4 md:first:mb-0 md:first:pr-4 md:last:mb-0 md:last:pl-4;
+  @apply text-[20px] leading-[24px] text-foreground first:font-normal last:mb-4 last:font-semibold md:p-4 md:first:mb-0 md:first:pr-4 md:last:mb-0 md:last:pl-4;
 }
 
 .stage-card {
@@ -35,7 +35,7 @@
 }
 
 .stage-card--mobile {
-  @apply flex-col !pt-[62px] pb-[34px] pl-5 pr-6;
+  @apply h-full flex-col !pt-[62px] pb-[34px] pl-5 pr-6;
 }
 
 .stage-card--mobile div {
@@ -84,7 +84,11 @@
 }
 
 .slider-button {
-  @apply inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-foreground transition-colors hover:bg-button-background-hover disabled:bg-disabled;
+  @apply inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-foreground transition-colors hover:bg-button-background-hover disabled:bg-disabled md:h-11 md:w-11;
+}
+
+.slider-button img {
+  @apply origin-center scale-75 md:scale-100;
 }
 
 .field-item {
