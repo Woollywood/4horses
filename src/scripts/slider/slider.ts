@@ -267,11 +267,29 @@ export class Slider {
   }
 
   /**
+   * Настройка блокировок для кнопок навигации
+   */
+  private _navigationButtonsCheck() {
+    const { navigation, loop } = this._options!;
+    const { buttonNext, buttonPrev } = navigation!;
+
+    if (!loop) {
+      this._realIndex === 0
+        ? buttonPrev.setAttribute("disabled", "")
+        : buttonPrev.removeAttribute("disabled");
+      this._realIndex === this._slides?.length! - 1
+        ? buttonNext.setAttribute("disabled", "")
+        : buttonNext.removeAttribute("disabled");
+    }
+  }
+
+  /**
    * Настройка навигации
    */
   private _navigationBuild() {
     const { navigation } = this._options!;
     const { buttonNext, buttonPrev } = navigation!;
+    this._navigationButtonsCheck();
 
     buttonNext.addEventListener("click", () => {
       if (!this._isLock) {
@@ -410,6 +428,7 @@ export class Slider {
     this._slideOffset = index * totalSlideWidth + index * spaceBetween!;
     this._slideToOffsetStyleX(this._slideOffset, speed);
     this._paginationUpdate();
+    this._navigationButtonsCheck();
 
     this._slideIndex = index;
   }

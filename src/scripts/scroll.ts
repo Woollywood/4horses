@@ -17,8 +17,6 @@ export function observerInit() {
 
   const observer = new IntersectionObserver(
     (entries) => {
-      console.log(entries);
-
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const target = entry.target as HTMLElement;

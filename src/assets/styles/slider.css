@@ -10,8 +10,12 @@
   @apply relative flex w-full shrink-0 items-center justify-center transition-transform;
 }
 
-.slider-wrapper.dragging {
-  @apply cursor-grab;
+.slider-button {
+  @apply inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-foreground transition-colors hover:bg-button-background-hover disabled:bg-disabled disabled:bg-foreground/20 md:h-11 md:w-11;
+}
+
+.slider-button img {
+  @apply origin-center scale-75 md:scale-100;
 }
 
 .slider-pagination-bullet {

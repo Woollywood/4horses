@@ -83,14 +83,6 @@
   @apply inline-flex items-center justify-center overflow-hidden rounded-[62px] bg-transparent p-3 text-base font-medium leading-[62%] text-blue ring-1 ring-inset ring-blue transition-colors hover:bg-blue hover:text-background sm:leading-[19.2px];
 }
 
-.slider-button {
-  @apply inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-foreground transition-colors hover:bg-button-background-hover disabled:bg-disabled md:h-11 md:w-11;
-}
-
-.slider-button img {
-  @apply origin-center scale-75 md:scale-100;
-}
-
 .field-item {
   @apply relative box-border pr-[calc(12px+6px)] text-base after:absolute after:right-0 after:top-[calc(1em/2-1.5px)] after:h-1.5 after:w-1.5 after:overflow-hidden after:rounded-full after:bg-background sm:text-[18px] md:text-[22px];
 }
