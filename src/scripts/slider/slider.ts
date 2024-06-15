@@ -1,5 +1,4 @@
 import { initialOptions } from "./utils";
-import { animate, circ } from "../utils";
 import type {
   SliderOptions,
   SliderBaseOptions,
@@ -400,7 +399,7 @@ export class Slider {
       );
 
       this._pagination.bullets
-        ?.find((bullet, i) => i === this._realIndex)
+        ?.find((_, i) => i === this._realIndex)
         ?.classList.add("active");
     } else {
       const fractionCurrentElement =
